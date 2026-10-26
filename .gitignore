@@ -1,0 +1,28 @@
+# --- Virtual environment (rebuilt from requirements.txt) ---
+.venv/
+
+# --- Python's automatic cache files ---
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# --- Datasets (too large; downloaded separately) ---
+# Ignore everything in these folders, EXCEPT the .gitkeep placeholder
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# --- Trained models (we decide how to share them in Phase 9) ---
+models/*
+!models/.gitkeep
+
+# --- Jupyter notebook autosave files ---
+.ipynb_checkpoints/
+
+# --- Secrets: NEVER commit these ---
+.env
+
+# --- Editor and operating-system files ---
+.vscode/
+Thumbs.db

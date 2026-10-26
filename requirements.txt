@@ -1,0 +1,22 @@
+#--Data handling
+pandas==3.0.6
+numpy==2.5.4
+
+#--Machine Learning
+scikit-learn==1.9.1 
+xgboost==3.4.1
+joblib==1.6.0
+
+#--Natural language processing
+spacy==3.8.16
+
+#--Chartsf`
+matplotlib==3.11.2
+plotly==7.1.0
+
+#--web app
+streamlit==1.66.0
+
+#--Development tools
+ipykernel==7.4.0
+pytest==9.1.1
