@@ -1,0 +1,15 @@
+# Tells pip which tool builds our package (setuptools is the standard one)
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+# Basic information about our project
+[project]
+name = "spam-shield"
+version = "0.1.0"
+description = "ML & NLP system classifying messages as ham, spam, phishing, or toxic"
+requires-python = ">=3.12"
+
+# Tells setuptools: "our package code lives inside the src folder"
+[tool.setuptools.packages.find]
+where = ["src"]

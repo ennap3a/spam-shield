@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+src/spam_shield/__init__.py
+src/spam_shield.egg-info/PKG-INFO
+src/spam_shield.egg-info/SOURCES.txt
+src/spam_shield.egg-info/dependency_links.txt
+src/spam_shield.egg-info/top_level.txt
