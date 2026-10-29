@@ -18,3 +18,10 @@ TOXIC_FILE = RAW_DATA_DIR / "toxic" / "train.csv"
 
 # --- The four classes our model predicts ---
 LABELS = ["ham", "spam", "phishing", "toxic"]
+
+# --- Processed dataset ---
+PROCESSED_DATASET_FILE = PROCESSED_DATA_DIR / "messages.csv"
+
+# --- Dataset building ---
+RANDOM_STATE = 42             # seed so random sampling is repeatable
+CHAT_SAMPLE_PER_CLASS = 8000  # rows kept per label from the large chat dataset
