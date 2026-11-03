@@ -1,5 +1,9 @@
-from spam_shield.preprocessing import clean_text, normalize_whitespace, strip_html
-
+from spam_shield.preprocessing import (
+    clean_text,
+    normalize_whitespace,
+    preprocess_text,
+    strip_html,
+)
 
 def test_full_example():
     raw = "<p>Hi!! I CAN'T log in. Visit https://evil.co/login NOW</p>"
@@ -40,4 +44,25 @@ def test_message_containing_only_special_characters():
     assert clean_text("!@#$%^&*()") == ""
 
 def test_message_containing_emoji():
-    assert clean_text("😀🔥")==""            
+    assert clean_text("😀🔥")==""       
+
+
+def test_lemmatization_and_stop_words():
+    assert preprocess_text("The cats were running to the shops") == "cat run shop"
+
+
+def test_negation_is_kept():
+    assert preprocess_text("This is NOT spam") == "not spam"
+
+
+def test_enron_is_removed():
+    assert preprocess_text("Meeting notes from Enron team") == "meeting note team"
+
+def test_spam_like_message():
+    assert preprocess_text("Congratulations! 😀🔥 You have WON a FREE prize !!! Visit https://hackes.co now!! ") == "congratulation win free prize visit url"
+
+
+def test_very_long_message_does_not_crash():
+    huge = "free prize " * 500_000      # about 5.5 million characters
+    result = preprocess_text(huge)
+    assert result.startswith("free prize")

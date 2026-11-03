@@ -6,6 +6,12 @@ both during training and when the app makes a prediction.
 
 import re
 
+
+from functools import lru_cache
+
+import spacy
+from spacy.lang.en.stop_words import STOP_WORDS as SPACY_STOP_WORDS
+
 # --- Regex patterns: compiled once, reused for every message ---
 HTML_TAG_PATTERN = re.compile(r"<[a-zA-Z/!][^>]*>")
 URL_PATTERN = re.compile(r"https?://\S+|www\.\S+")
@@ -13,6 +19,8 @@ EMAIL_PATTERN = re.compile(r"\S+@\S+\.\S+")
 NON_ASCII_PATTERN = re.compile(r"[^\x00-\x7F]+")
 SPECIAL_CHAR_PATTERN = re.compile(r"[^a-z0-9\s]")
 WHITESPACE_PATTERN = re.compile(r"\s+")
+# spaCy only needs the start of a message; this caps memory and time.
+MAX_NLP_CHARS = 10_000
 
 # Order matters: the specific forms come before the general "n't",
 # otherwise "won't" would become "wo not".
@@ -26,6 +34,17 @@ CONTRACTIONS = [
     ("'ve", " have"),
     ("'d", " would"),
 ]
+
+# Negations flip meaning ("not spam" vs "spam"), so we never remove them.
+NEGATION_WORDS = {"no", "not", "nor", "never", "none", "nothing",
+                  "nobody", "neither", "nowhere"}
+
+# Words that are useless only because of where our data came from.
+# "enron" appears in ~10% of ham emails: a shortcut, not a real signal.
+DOMAIN_STOP_WORDS = {"enron"}
+
+# spaCy's list, minus the negations, plus our domain words.
+STOP_WORDS = (SPACY_STOP_WORDS - NEGATION_WORDS) | DOMAIN_STOP_WORDS
 
 
 def strip_html(text: str) -> str:
@@ -79,3 +98,35 @@ def clean_text(text: str) -> str:
     text = remove_special_characters(text)
     text = normalize_whitespace(text)
     return text
+
+
+
+
+@lru_cache(maxsize=1)
+def get_nlp():
+    """Load the spaCy model once; later calls reuse the same copy."""
+    return spacy.load("en_core_web_sm", disable=["parser", "ner"])
+
+
+def lemmatize_and_filter(doc) -> str:
+    """Turn a spaCy doc into a string of lemmas, without stop words."""
+    tokens = []
+    for token in doc:
+        lemma = token.lemma_.lower()
+        if token.is_space or lemma in STOP_WORDS:
+            continue
+        tokens.append(lemma)
+    return " ".join(tokens)
+
+
+def preprocess_texts(texts: list[str], batch_size: int = 1000) -> list[str]:
+    """Clean, lemmatize and filter many messages at once (fast)."""
+    nlp = get_nlp()
+    cleaned = [clean_text(text)[:MAX_NLP_CHARS] for text in texts]
+    docs = nlp.pipe(cleaned, batch_size=batch_size)
+    return [lemmatize_and_filter(doc) for doc in docs]
+
+
+def preprocess_text(text: str) -> str:
+    """Same as preprocess_texts, for a single message (used by the app later)."""
+    return preprocess_texts([text])[0]

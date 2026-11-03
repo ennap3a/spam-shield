@@ -25,3 +25,4 @@ PROCESSED_DATASET_FILE = PROCESSED_DATA_DIR / "messages.csv"
 # --- Dataset building ---
 RANDOM_STATE = 42             # seed so random sampling is repeatable
 CHAT_SAMPLE_PER_CLASS = 8000  # rows kept per label from the large chat dataset
+MAX_MESSAGE_CHARS = 50_000  # messages longer than this are dropped

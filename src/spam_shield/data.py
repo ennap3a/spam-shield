@@ -60,6 +60,11 @@ def drop_empty_messages(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def drop_overlong_messages(df: pd.DataFrame, max_chars: int) -> pd.DataFrame:
+    """Remove rows whose text is longer than max_chars."""
+    return df[df["text_content"].str.len() <= max_chars]
+
+
 
 def drop_duplicate_messages(df: pd.DataFrame)->pd.DataFrame:
     """Remove repeated messages and messages that appear with conflicting labels"""
@@ -101,6 +106,9 @@ def build_dataset() -> pd.DataFrame:
     df = drop_empty_messages(df)
     print(f"After dropping empty:{len(df):>8,} rows")
 
+    df = drop_overlong_messages(df, config.MAX_MESSAGE_CHARS)
+    print(f"After length filter: {len(df):>8,} rows")
+
     df = drop_duplicate_messages(df)
     print(f"After deduplication: {len(df):>8,} rows")
 
@@ -109,6 +117,7 @@ def build_dataset() -> pd.DataFrame:
 
     df.insert(0, "message_id", range(1, len(df) + 1))   # IDs 1, 2, 3, ... as the FIRST column
     validate_dataset(df)
+    assert (df["text_content"].str.len() <= config.MAX_MESSAGE_CHARS).all(), "Found overlong message"
     return df
 
 
