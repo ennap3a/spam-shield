@@ -11,3 +11,4 @@
 | Advanced | MLflow experiment tracking | Professional ML workflow | Medium |
 | Optional | User feedback → retraining | Human-in-the-loop | Medium |
 | Optional | Data drift monitoring | MLOps awareness | High |
+- Phishing_Email.csv has a broken row that swallowed thousands of emails (17M chars). Currently removed by MAX_MESSAGE_CHARS; investigate the CSV quoting in load_phishing_emails().

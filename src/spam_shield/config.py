@@ -26,3 +26,7 @@ PROCESSED_DATASET_FILE = PROCESSED_DATA_DIR / "messages.csv"
 RANDOM_STATE = 42             # seed so random sampling is repeatable
 CHAT_SAMPLE_PER_CLASS = 8000  # rows kept per label from the large chat dataset
 MAX_MESSAGE_CHARS = 50_000  # messages longer than this are dropped
+# --- Train/test split ---
+TEST_SIZE = 0.2                                   # 20% of messages are kept for the final exam
+TRAIN_FILE = PROCESSED_DATA_DIR / "train.csv"
+TEST_FILE = PROCESSED_DATA_DIR / "test.csv"
