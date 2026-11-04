@@ -14,7 +14,9 @@ from spacy.lang.en.stop_words import STOP_WORDS as SPACY_STOP_WORDS
 
 # --- Regex patterns: compiled once, reused for every message ---
 HTML_TAG_PATTERN = re.compile(r"<[a-zA-Z/!][^>]*>")
-URL_PATTERN = re.compile(r"https?://\S+|www\.\S+")
+# Matches normal links (https://x.com/a, www.x.com) AND links written with
+# spaces, like "http : / / site . com / page", which appear in the email data.
+URL_PATTERN = re.compile(r"https?\s*:\s*/\s*/\s*\w[\w-]*(?:\s*[./]\s*[\w-]+)*|www\.\S+")
 EMAIL_PATTERN = re.compile(r"\S+@\S+\.\S+")
 NON_ASCII_PATTERN = re.compile(r"[^\x00-\x7F]+")
 SPECIAL_CHAR_PATTERN = re.compile(r"[^a-z0-9\s]")
@@ -41,8 +43,7 @@ NEGATION_WORDS = {"no", "not", "nor", "never", "none", "nothing",
 
 # Words that are useless only because of where our data came from.
 # "enron" appears in ~10% of ham emails: a shortcut, not a real signal.
-DOMAIN_STOP_WORDS = {"enron"}
-
+DOMAIN_STOP_WORDS = {"enron", "wikipedia"}
 # spaCy's list, minus the negations, plus our domain words.
 STOP_WORDS = (SPACY_STOP_WORDS - NEGATION_WORDS) | DOMAIN_STOP_WORDS
 

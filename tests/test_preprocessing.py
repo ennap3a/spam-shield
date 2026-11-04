@@ -66,3 +66,6 @@ def test_very_long_message_does_not_crash():
     huge = "free prize " * 500_000      # about 5.5 million characters
     result = preprocess_text(huge)
     assert result.startswith("free prize")
+
+def test_spaced_url_becomes_token():
+    assert clean_text("Visit http : / / evil.com / login now")=="visit url now"
