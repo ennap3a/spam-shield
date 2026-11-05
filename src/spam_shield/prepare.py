@@ -22,9 +22,6 @@ def add_processed_text(df: pd.DataFrame) -> pd.DataFrame:
 
 def split_train_test(df: pd.DataFrame, test_size: float, random_state: int):
     """Split so every (label, source) group keeps the same share in train and test."""
-    # TODO: one line. Make `strata` = the label and the source glued together
-    #       with "_" in between, for every row (e.g. "spam_sms", "ham_email").
-    #       Hint: you can add text columns together with +, like df["a"] + "_" + df["b"]
     strata = df["label"] + "_" + df["source"]
     train_df, test_df = train_test_split(
         df,
@@ -34,6 +31,11 @@ def split_train_test(df: pd.DataFrame, test_size: float, random_state: int):
     )
     return train_df, test_df
 
+def load_split(path) -> pd.DataFrame:
+    """Read a train/test CSV; empty processed texts come back as "" (not NaN) """
+    df = pd.read_csv(path)
+    df["processed_text"] = df["processed_text"].fillna("")
+    return df   
 
 if __name__ == "__main__":
     df = pd.read_csv(config.PROCESSED_DATASET_FILE)
