@@ -30,3 +30,5 @@ MAX_MESSAGE_CHARS = 50_000  # messages longer than this are dropped
 TEST_SIZE = 0.2                                   # 20% of messages are kept for the final exam
 TRAIN_FILE = PROCESSED_DATA_DIR / "train.csv"
 TEST_FILE = PROCESSED_DATA_DIR / "test.csv"
+# --- Models ---
+MODEL_FILE = MODELS_DIR / "naive_bayes.joblib"
