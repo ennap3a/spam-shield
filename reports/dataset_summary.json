@@ -1,0 +1,31 @@
+{
+  "total_messages": 38656,
+  "train_messages": 30924,
+  "test_messages": 7732,
+  "label_by_source": {
+    "chat": {
+      "ham": 8000,
+      "phishing": 0,
+      "spam": 0,
+      "toxic": 8000
+    },
+    "email": {
+      "ham": 10957,
+      "phishing": 6539,
+      "spam": 0,
+      "toxic": 0
+    },
+    "sms": {
+      "ham": 4518,
+      "phishing": 0,
+      "spam": 642,
+      "toxic": 0
+    }
+  },
+  "median_chars_by_label": {
+    "ham": 339,
+    "phishing": 763,
+    "spam": 148,
+    "toxic": 132
+  }
+}

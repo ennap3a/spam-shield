@@ -14,6 +14,7 @@ from sklearn.metrics import (
 )
 
 from spam_shield import config
+from spam_shield.predict import top_words_per_label
 from spam_shield.prepare import load_split
 
 
@@ -85,3 +86,21 @@ if __name__ == "__main__":
     report_file = config.REPORTS_DIR / "test_metrics.json"
     report_file.write_text(json.dumps(build_report(test, predictions, baseline), indent=2))
     print(f"\nSaved report to {report_file}")
+
+    # Small summaries for the dashboard (the app cannot read data/, it is not on GitHub).
+    everything = pd.concat([train, test], ignore_index=True)
+    summary = {
+        "total_messages": len(everything),
+        "train_messages": len(train),
+        "test_messages": len(test),
+        "label_by_source": pd.crosstab(everything["label"], everything["source"]).to_dict(),
+        "median_chars_by_label": (
+            everything.groupby("label")["text_content"].apply(lambda t: int(t.str.len().median()))
+            .to_dict()
+        ),
+    }
+    (config.REPORTS_DIR / "dataset_summary.json").write_text(json.dumps(summary, indent=2))
+    (config.REPORTS_DIR / "top_words.json").write_text(
+        json.dumps(top_words_per_label(model), indent=2)
+    )
+    print(f"Saved dataset_summary.json and top_words.json to {config.REPORTS_DIR}")

@@ -11,6 +11,7 @@ from functools import lru_cache
 from pathlib import Path
 
 import joblib
+import numpy as np
 import pandas as pd
 
 from spam_shield import config
@@ -19,9 +20,9 @@ from spam_shield.preprocessing import preprocess_text
 logger = logging.getLogger(__name__)
 
 RISK_MESSAGES = {
-    "safe": "Looks like a normal message.",
+    "safe": "This looks like a normal message.",
     "suspicious": "Be careful: this message has some warning signs.",
-    "high": "High risk: this message is very likely harmful.",
+    "high": "This message is very likely harmful.",
 }
 
 
@@ -79,14 +80,64 @@ def risk_level(risk_score: float) -> str:
     return "safe"
 
 
+def _to_model_input(text: str) -> pd.DataFrame:
+    """The model expects the same two columns it was trained on."""
+    return pd.DataFrame({"text_content": [text], "processed_text": [preprocess_text(text)]})
+
+
+def word_weights(model) -> np.ndarray:
+    """How much each word pushes towards each label: one row per label.
+
+    The calibrated model holds 5 LinearSVCs (one per calibration fold); we
+    average their coefficients. A positive weight pushes TOWARDS that label.
+    """
+    calibrated = model.named_steps["classifier"].calibrated_classifiers_
+    return np.mean([c.estimator.coef_ for c in calibrated], axis=0)
+
+
+def vocabulary(model) -> np.ndarray:
+    """The words/word pairs of the TF-IDF part, in column order."""
+    return model.named_steps["features"].named_transformers_["tfidf"].get_feature_names_out()
+
+
+def explain_prediction(text, label: str, top_n: int = 5) -> list[tuple[str, float]]:
+    """The words in THIS message that pushed most towards `label`.
+
+    contribution = (TF-IDF value of the word in this message) x (word weight)
+    Only words with a positive contribution are returned, biggest first.
+    """
+    text = validate_message(text)
+    model = load_model()
+    X = model.named_steps["features"].transform(_to_model_input(text)).tocsr()
+    weights = word_weights(model)[list(model.classes_).index(label)]
+    words = vocabulary(model)
+
+    contributions = []
+    for column, value in zip(X.indices, X.data):
+        if column < len(words):                   # TF-IDF columns come first
+            contribution = value * weights[column]
+            if contribution > 0:
+                contributions.append((words[column], float(contribution)))
+    return sorted(contributions, key=lambda pair: pair[1], reverse=True)[:top_n]
+
+
+def top_words_per_label(model, top_n: int = 15) -> dict[str, list[str]]:
+    """The words the model relies on most for each label (used by the dashboard)."""
+    words = vocabulary(model)
+    weights = word_weights(model)[:, : len(words)]   # TF-IDF columns only
+    result = {}
+    for row, label in enumerate(model.classes_):
+        best = np.argsort(weights[row])[::-1][:top_n]
+        result[str(label)] = [str(words[i]) for i in best]
+    return result
+
+
 def predict_message(text) -> Prediction:
     """Classify one raw message exactly the way the training data was processed."""
     text = validate_message(text)
     model = load_model()
 
-    # The model expects the same two columns it was trained on.
-    row = pd.DataFrame({"text_content": [text], "processed_text": [preprocess_text(text)]})
-    scores = model.predict_proba(row)[0]
+    scores = model.predict_proba(_to_model_input(text))[0]
     by_label = dict(zip(model.classes_, scores))
     probabilities = {label: float(by_label[label]) for label in config.LABELS}
 
