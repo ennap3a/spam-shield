@@ -13,3 +13,5 @@
 | Optional | Data drift monitoring | MLOps awareness | High |
 | Data fix | Investigate CSV quoting in `load_phishing_emails()`: one broken row swallowed thousands of emails (17M chars); currently dropped by `MAX_MESSAGE_CHARS` | Recover lost emails | Low |
 | Data fix | Add email spam (e.g. SpamAssassin) and SMS phishing (smishing) examples: today spam only exists as SMS and phishing only as email | Stop the model learning the channel instead of the label | Medium |
+| Data fix | Remove remaining source leaks: years (2000–2005) and names (`vince`, `paliourg`) are among the top words for ham/phishing | Model learns content, not dataset age | Low |
+| Data fix | Collect modern scam examples (gift-card, parcel, MFA-fatigue, QR phishing) | Catch today's attacks, not 2000s ones | Medium |
