@@ -3,7 +3,7 @@
 import time
 
 import joblib
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import ComplementNB
 from sklearn.pipeline import Pipeline
 
 from spam_shield import config
@@ -22,7 +22,9 @@ def build_model(classifier) -> Pipeline:
 if __name__ == "__main__":
     train = load_split(config.TRAIN_FILE)
 
-    model = build_model(MultinomialNB())
+    # Winner of Task 4.2 (see notebooks/03_model_experiments.ipynb):
+    # best validation macro-F1 (0.866) while keeping ham recall above 0.9.
+    model = build_model(ComplementNB())
     start = time.time()
     model.fit(train, train["label"])
     print(f"Trained on {len(train):,} messages in {time.time() - start:.1f} seconds")
