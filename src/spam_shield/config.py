@@ -43,3 +43,6 @@ CHALLENGE_FILE = DATA_DIR / "challenge" / "challenge_set.csv"
 
 # --- Reports (small result files that ARE committed, used by the app) ---
 REPORTS_DIR = PROJECT_ROOT / "reports"
+
+# --- API ---
+MAX_BATCH_SIZE = 100  # most messages one /predict/batch request may contain
