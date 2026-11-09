@@ -23,7 +23,9 @@ def compute_metrics(y_true, y_pred) -> dict:
     return {
         "accuracy": accuracy_score(y_true, y_pred),
         "macro_f1": f1_score(y_true, y_pred, average="macro", zero_division=0),
-        "phishing_recall": recall_score(y_true, y_pred, labels=["phishing"], average="macro", zero_division=0),
+        "phishing_recall": recall_score(
+            y_true, y_pred, labels=["phishing"], average="macro", zero_division=0
+        ),
     }
 
 
@@ -55,7 +57,9 @@ def build_report(test: pd.DataFrame, predictions, baseline: dict) -> dict:
 def print_report(test: pd.DataFrame, predictions) -> None:
     """Per-label report, confusion matrix, and results per source."""
     print("\n=== Per label ===")
-    print(classification_report(test["label"], predictions, labels=config.LABELS, digits=3, zero_division=0))
+    print(classification_report(
+        test["label"], predictions, labels=config.LABELS, digits=3, zero_division=0
+    ))
 
     print("=== Confusion matrix (rows = truth, columns = prediction) ===")
     matrix = confusion_matrix(test["label"], predictions, labels=config.LABELS)

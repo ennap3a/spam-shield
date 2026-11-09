@@ -35,7 +35,7 @@ def load_split(path) -> pd.DataFrame:
     """Read a train/test CSV; empty processed texts come back as "" (not NaN) """
     df = pd.read_csv(path)
     df["processed_text"] = df["processed_text"].fillna("")
-    return df   
+    return df
 
 if __name__ == "__main__":
     df = pd.read_csv(config.PROCESSED_DATASET_FILE)

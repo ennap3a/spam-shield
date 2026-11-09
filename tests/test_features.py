@@ -1,5 +1,6 @@
-import pytest
 import pandas as pd
+import pytest
+
 from spam_shield.features import (
     MODEL_METADATA_COLUMNS,
     build_feature_transformer,
@@ -42,11 +43,14 @@ def test_feature_transformer_shape():
 def test_new_message_gets_same_columns():
     transformer = build_feature_transformer(min_df=1)
     X_train = transformer.fit_transform(make_fake_messages())
-    new = pd.DataFrame({"text_content": ["totally new words"], "processed_text": ["totally new word"]})
+    new = pd.DataFrame({
+        "text_content": ["totally new words"],
+        "processed_text": ["totally new word"],
+    })
     X_new = transformer.transform(new)            # transform only, NO fit!
     assert X_new.shape[1] == X_train.shape[1]
 
 
 def test_all_features_are_not_negative():
     X = build_feature_transformer(min_df=1).fit_transform(make_fake_messages())
-    assert X.min() >= 0                           # Naive Bayes needs this    
+    assert X.min() >= 0                           # Naive Bayes needs this

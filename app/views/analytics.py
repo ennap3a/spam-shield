@@ -7,8 +7,8 @@ so the page works even where the raw datasets are not available.
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-
 import ui
+
 from spam_shield import config
 
 st.title("📊 Model analytics")
@@ -92,7 +92,8 @@ with right:
 
 # --- How the model was chosen ---------------------------------------------------
 st.subheader("How the model was chosen")
-st.caption("All choices were made on a validation split of the training data, never on the test set.")
+st.caption("All choices were made on a validation split of the training data, "
+           "never on the test set.")
 comparison = ui.load_report("model_comparison.csv").rename(columns={"name": "model"})
 st.dataframe(
     comparison[["model", "val_macro_f1", "val_phishing_recall", "challenge_macro_f1", "seconds"]],
@@ -154,7 +155,8 @@ st.caption(f"{summary['total_messages']:,} messages after cleaning "
            f"({summary['train_messages']:,} train / {summary['test_messages']:,} test).")
 table = pd.DataFrame(summary["label_by_source"]).reindex(config.LABELS)
 table.index = [ui.LABEL_NAMES[label] for label in table.index]
-table["median length (chars)"] = [summary["median_chars_by_label"][label] for label in config.LABELS]
+median_chars = summary["median_chars_by_label"]
+table["median length (chars)"] = [median_chars[label] for label in config.LABELS]
 st.dataframe(table, width="stretch")
 st.caption("⚠️ Each harmful label comes from only one channel: spam only from SMS, phishing "
            "only from email, toxic only from chat. This is the biggest limitation of the project.")
@@ -162,7 +164,7 @@ st.caption("⚠️ Each harmful label comes from only one channel: spam only fro
 st.subheader("Words the model relies on most")
 top_words = ui.load_report("top_words.json")
 columns = st.columns(4)
-for column, label in zip(columns, config.LABELS):
+for column, label in zip(columns, config.LABELS, strict=True):
     words = top_words[label][:12]
     if label == "toxic":
         words = [ui.mask_word(word) for word in words]

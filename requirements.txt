@@ -3,14 +3,16 @@ pandas==3.0.6
 numpy==2.5.4
 
 #--Machine Learning
-scikit-learn==1.9.1 
+scikit-learn==1.9.1
 xgboost==3.4.1
 joblib==1.6.0
 
 #--Natural language processing
 spacy==3.8.16
+# The English model, installed from its official release (needed on Streamlit Cloud and in CI)
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
 
-#--Chartsf`
+#--Charts
 matplotlib==3.11.2
 plotly==7.1.0
 
@@ -20,3 +22,4 @@ streamlit==1.66.0
 #--Development tools
 ipykernel==7.4.0
 pytest==9.1.1
+ruff==0.17.4

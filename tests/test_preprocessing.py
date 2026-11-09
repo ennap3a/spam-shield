@@ -5,6 +5,7 @@ from spam_shield.preprocessing import (
     strip_html,
 )
 
+
 def test_full_example():
     raw = "<p>Hi!! I CAN'T log in. Visit https://evil.co/login NOW</p>"
     assert clean_text(raw) == "hi i cannot log in visit url now"
@@ -38,13 +39,13 @@ def test_mojibake_removed():
     assert clean_text("ï½abc") == "abc"
 
 def test_whitespace_normalized():
-    assert normalize_whitespace("  a  b\nc\t") == "a b c"   
+    assert normalize_whitespace("  a  b\nc\t") == "a b c"
 
 def test_message_containing_only_special_characters():
     assert clean_text("!@#$%^&*()") == ""
 
 def test_message_containing_emoji():
-    assert clean_text("😀🔥")==""       
+    assert clean_text("😀🔥")==""
 
 
 def test_lemmatization_and_stop_words():
@@ -59,7 +60,8 @@ def test_enron_is_removed():
     assert preprocess_text("Meeting notes from Enron team") == "meeting note team"
 
 def test_spam_like_message():
-    assert preprocess_text("Congratulations! 😀🔥 You have WON a FREE prize !!! Visit https://hackes.co now!! ") == "congratulation win free prize visit url"
+    raw = "Congratulations! 😀🔥 You have WON a FREE prize !!! Visit https://hackes.co now!! "
+    assert preprocess_text(raw) == "congratulation win free prize visit url"
 
 
 def test_very_long_message_does_not_crash():

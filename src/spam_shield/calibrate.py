@@ -51,7 +51,7 @@ def calibration_error(probabilities: np.ndarray, correct: np.ndarray, bins: int 
     confidence = probabilities.max(axis=1)
     edges = np.linspace(0, 1, bins + 1)
     rows, error = [], 0.0
-    for low, high in zip(edges[:-1], edges[1:]):
+    for low, high in zip(edges[:-1], edges[1:], strict=True):
         in_bin = (confidence > low) & (confidence <= high)
         if not in_bin.any():
             continue

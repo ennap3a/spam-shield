@@ -5,8 +5,6 @@ both during training and when the app makes a prediction.
 """
 
 import re
-
-
 from functools import lru_cache
 
 import spacy
@@ -75,7 +73,7 @@ def remove_non_ascii(text: str) -> str:
     """Replace non-ASCII characters (emoji, mojibake like ï½) with a space."""
     text = NON_ASCII_PATTERN.sub(" ", text)
     return text
-   
+
 
 
 def remove_special_characters(text: str) -> str:

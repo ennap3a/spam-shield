@@ -73,4 +73,3 @@ def build_feature_transformer(
     if metadata_columns:                           # an empty list means "words only"
         parts.append(("metadata", metadata, "text_content"))
     return ColumnTransformer(parts)
-       

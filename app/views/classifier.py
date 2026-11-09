@@ -1,8 +1,8 @@
 """Spam Shield, page 1: classify a message."""
 
 import streamlit as st
-
 import ui
+
 from spam_shield.predict import (
     InvalidMessageError,
     explain_prediction,
@@ -12,7 +12,9 @@ from spam_shield.predict import (
 
 EXAMPLES = {
     "Choose an example…": "",
-    "Prize spam (SMS)": "WINNER!! You have been selected for a £1000 prize. Text CLAIM to 80086 now!",
+    "Prize spam (SMS)": (
+        "WINNER!! You have been selected for a £1000 prize. Text CLAIM to 80086 now!"
+    ),
     "Bank phishing (email)": (
         "Dear customer, your account has been suspended due to unusual activity. "
         "Verify your password within 24 hours at http://secure-bank-verify.com"
@@ -88,8 +90,10 @@ with st.expander("How does it work, and what are its limits?"):
     st.markdown(
         """
 1. The message is cleaned (links become `url`, contractions expanded, lowercase).
-2. spaCy turns words into their dictionary form and removes filler words, but keeps *not* and *never*.
-3. TF-IDF scores the words, plus a few counts: links, email addresses, `!`, currency signs and digits.
+2. spaCy turns words into their dictionary form and removes filler words
+   (but keeps *not* and *never*).
+3. TF-IDF scores the words, plus a few counts: links, email addresses, `!`,
+   currency signs and digits.
 4. A calibrated Linear SVM gives a probability for each label.
 
 **Limits, measured honestly:** the model scores 0.92 macro-F1 on held-out test messages,

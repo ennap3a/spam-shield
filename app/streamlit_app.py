@@ -6,7 +6,6 @@ Run locally with:  streamlit run app/streamlit_app.py
 import logging
 
 import streamlit as st
-
 import ui  # noqa: F401  (adds src/ to the import path for the pages)
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")

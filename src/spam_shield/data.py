@@ -7,28 +7,33 @@ Every loader returns a DataFrame with exactly three columns:
 """
 
 import csv
+
 import pandas as pd
+
 from spam_shield import config
+
 OUTPUT_COLUMNS =["text_content", "label", "source"]
 
 def load_sms_spam(path=config.SMS_SPAM_FILE) -> pd.DataFrame:
     df =pd.read_csv(
         path,
         sep="\t", #columns separated by TAB
-        header=None, # the file has no header 
+        header=None, # the file has no header
         names=["label","text_content"], #we name the columns ourselves
         quoting=csv.QUOTE_NONE,  #treat quote mark as normal text
         encoding="utf-8"
-    
+
                     )
-    df["source"] = "sms"   # create a new column; every row gets "sms" as the source that the data came from
+    # create a new column; every row gets "sms" as the source that the data came from
+    df["source"] = "sms"
     return df[OUTPUT_COLUMNS]
 
 
 def load_phishing_emails(path=config.PHISHING_FILE) -> pd.DataFrame:
 
     df=pd.read_csv(path) #read the csv of phishing emails
-    df=df.rename(columns={"Email Text":"text_content"}) #translate or change their label to our default label
+    #translate or change their label to our default label
+    df=df.rename(columns={"Email Text":"text_content"})
     label_map ={"Safe Email": "ham", "Phishing Email": "phishing"}
     df["label"] = df["Email Type"].map(label_map)
     df["source"]= "email"
@@ -53,7 +58,8 @@ def drop_empty_messages(df: pd.DataFrame) -> pd.DataFrame:
     """Remove rows whose text is missing or contains only whitespace.  """
 
     df = df.dropna(subset=["text_content"]).copy() # to drop the empty messages
-    df["text_content"]= df["text_content"].str.strip() # to remove the extra spaces that might exist after the end of the message
+    # to remove the extra spaces that might exist after the end of the message
+    df["text_content"]= df["text_content"].str.strip()
     #like "WIN a prize" ---> "WIN a prize "
     df= df[df["text_content"] !=""]
 
@@ -117,7 +123,8 @@ def build_dataset() -> pd.DataFrame:
 
     df.insert(0, "message_id", range(1, len(df) + 1))   # IDs 1, 2, 3, ... as the FIRST column
     validate_dataset(df)
-    assert (df["text_content"].str.len() <= config.MAX_MESSAGE_CHARS).all(), "Found overlong message"
+    is_short_enough = df["text_content"].str.len() <= config.MAX_MESSAGE_CHARS
+    assert is_short_enough.all(), "Found overlong message"
     return df
 
 

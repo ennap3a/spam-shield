@@ -113,7 +113,7 @@ def explain_prediction(text, label: str, top_n: int = 5) -> list[tuple[str, floa
     words = vocabulary(model)
 
     contributions = []
-    for column, value in zip(X.indices, X.data):
+    for column, value in zip(X.indices, X.data, strict=True):
         if column < len(words):                   # TF-IDF columns come first
             contribution = value * weights[column]
             if contribution > 0:
@@ -138,7 +138,7 @@ def predict_message(text) -> Prediction:
     model = load_model()
 
     scores = model.predict_proba(_to_model_input(text))[0]
-    by_label = dict(zip(model.classes_, scores))
+    by_label = dict(zip(model.classes_, scores, strict=True))
     probabilities = {label: float(by_label[label]) for label in config.LABELS}
 
     label = max(probabilities, key=probabilities.get)
