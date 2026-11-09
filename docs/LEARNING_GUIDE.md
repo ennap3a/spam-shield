@@ -1,9 +1,8 @@
 # Spam Shield: Learning Guide (Phases 5–9)
 
-Phases 0–4 we did together, step by step. Phases 5–9 were built in one session so the
-project could be finished in a day. This guide is the lesson for those phases: read one
-section at a time, open the file it talks about next to it, and answer the questions at
-the end of each section before you look at the answers.
+This guide explains Phases 5–9 of the project. Read one section at a time, open the
+file it talks about next to it, and answer the questions at the end of each section
+before you look at the answers.
 
 **How to use it:** for each section, (1) read "The idea", (2) read the code in the file,
 (3) run the command yourself and compare with the numbers here, (4) answer the questions.

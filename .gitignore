@@ -31,5 +31,3 @@ Thumbs.db
 
 *.egg-info/
 .DS_Store
-# --- Local Claude Code / editor launch settings ---
-.claude/
