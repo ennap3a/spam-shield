@@ -32,3 +32,5 @@ TRAIN_FILE = PROCESSED_DATA_DIR / "train.csv"
 TEST_FILE = PROCESSED_DATA_DIR / "test.csv"
 # --- Models ---
 MODEL_FILE = MODELS_DIR / "naive_bayes.joblib"
+# --- Hand-written challenge set (messages from outside our 3 datasets) ---
+CHALLENGE_FILE = DATA_DIR / "challenge" / "challenge_set.csv"

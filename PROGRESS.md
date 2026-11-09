@@ -1,8 +1,8 @@
 # Progress Log
 
 ## Current status
-- **Phase:** 4 – First model + honest evaluation
-- **Next task:** 4.3 – Hand-written challenge set + error analysis
+- **Phase:** 5 – Model comparison
+- **Next task:** 5.1 – Compare Logistic Regression, SVM and XGBoost
 
 ## Completed
 - [x] 0.1 – Development environment (Python 3.12, venv, libraries, spaCy model)
@@ -17,6 +17,7 @@
 - [x] 3.3 – One feature transformer: TF-IDF + scaled metadata
 - [x] 4.1 – First model (MultinomialNB) vs "always-ham" baseline
 - [x] 4.2 – Compared imbalance fixes on a validation split, chose ComplementNB
+- [x] 4.3 – Hand-written challenge set (40 messages) + error analysis
 
 ## Key decisions
 | Decision | Choice | Reason |
@@ -38,6 +39,14 @@
 | MultinomialNB | test | 0.636 | 0.752 | 0.864 |
 | ComplementNB | validation | 0.866 | 0.912 | 0.896 |
 | ComplementNB | test | 0.871 | 0.901 | 0.896 |
+| ComplementNB | challenge set (40) | 0.535 | 0.600 | 0.575 |
+
+## Challenge set findings (Task 4.3)
+- **Spam vs phishing is really "SMS vs email".** In our data, spam only exists as SMS and phishing only as email. 6 of 10 spam messages written as emails were called phishing.
+- **Phishing without a link or with a new trick is missed.** The IT-helpdesk password request, the CEO gift-card scam and the Netflix payment text were all called ham.
+- **Short casual messages are unstable.** Casual chat ham was called toxic, and short insults with no swear words were called ham. This matches the test set, where 13% of normal SMS were called toxic.
+- **Money words push towards phishing.** A friend asking to split a bill was called phishing.
+- Next: check whether stronger models (Phase 5) make the same mistakes; consider adding email spam and SMS phishing data (see BACKLOG).
 
 ## What I learned
 - Training vs inference, and why preprocessing must be identical
@@ -50,3 +59,4 @@
 - fit on train only, transform on test; a test value above 1 after scaling is proof of no peeking
 - Accuracy hides small labels; macro-F1, recall, precision, support and the confusion matrix don't
 - Validation set = practice exam, test set = real exam (used once)
+- A high test score can hide label problems: the challenge set showed our labels are tied to the source
