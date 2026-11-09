@@ -31,7 +31,13 @@ TEST_SIZE = 0.2                                   # 20% of messages are kept for
 TRAIN_FILE = PROCESSED_DATA_DIR / "train.csv"
 TEST_FILE = PROCESSED_DATA_DIR / "test.csv"
 # --- Models ---
-MODEL_FILE = MODELS_DIR / "naive_bayes.joblib"
+MODEL_FILE = MODELS_DIR / "spam_shield_model.joblib"   # committed: the app loads it
+
+# --- Risk levels shown in the app (risk = 1 - probability of ham) ---
+# Chosen on validation in Task 5.3 (reports/risk_thresholds.csv): from 0.3 we
+# warn about ~94% of harmful messages while ~10% of normal ones get a warning.
+SUSPICIOUS_RISK = 0.3
+HIGH_RISK = 0.7
 # --- Hand-written challenge set (messages from outside our 3 datasets) ---
 CHALLENGE_FILE = DATA_DIR / "challenge" / "challenge_set.csv"
 

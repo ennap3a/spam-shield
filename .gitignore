@@ -13,9 +13,10 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 
-# --- Trained models (we decide how to share them in Phase 9) ---
+# --- Trained models: ignored, EXCEPT the final model the app loads ---
 models/*
 !models/.gitkeep
+!models/spam_shield_model.joblib
 
 # --- Jupyter notebook autosave files ---
 .ipynb_checkpoints/

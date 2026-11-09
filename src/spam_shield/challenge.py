@@ -26,3 +26,7 @@ if __name__ == "__main__":
     print(f"\n=== {len(mistakes)} mistakes ===")
     for row in mistakes.itertuples():
         print(f"[{row.label} -> {row.predicted}] ({row.note}) {row.text_content}")
+
+    config.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    columns = ["text_content", "label", "predicted", "source", "note"]
+    challenge[columns].to_csv(config.REPORTS_DIR / "challenge_results.csv", index=False)

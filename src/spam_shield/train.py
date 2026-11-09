@@ -1,10 +1,11 @@
-"""Train a model (features + classifier in one Pipeline) and save it to disk."""
+"""Train the final model (features + classifier in one Pipeline) and save it to disk."""
 
 import time
 
 import joblib
-from sklearn.naive_bayes import ComplementNB
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.pipeline import Pipeline
+from sklearn.svm import LinearSVC
 
 from spam_shield import config
 from spam_shield.features import build_feature_transformer
@@ -19,12 +20,25 @@ def build_model(classifier, features=None) -> Pipeline:
     ])
 
 
+def build_final_model() -> Pipeline:
+    """The chosen model, with the evidence for each choice.
+
+    - LinearSVC: best validation macro-F1 in Task 5.1 (reports/model_comparison.csv)
+    - C=0.5, class_weight="balanced": best 5-fold CV score in Task 5.2
+      (reports/tuning_results.csv)
+    - CalibratedClassifierCV(sigmoid): turns SVM scores into probabilities
+      that match reality, Task 5.3 (reports/calibration_comparison.csv)
+    """
+    classifier = CalibratedClassifierCV(
+        LinearSVC(C=0.5, class_weight="balanced"), method="sigmoid", cv=5
+    )
+    return build_model(classifier)
+
+
 if __name__ == "__main__":
     train = load_split(config.TRAIN_FILE)
 
-    # Winner of Task 4.2 (see notebooks/03_model_experiments.ipynb):
-    # best validation macro-F1 (0.866) while keeping ham recall above 0.9.
-    model = build_model(ComplementNB())
+    model = build_final_model()
     start = time.time()
     model.fit(train, train["label"])
     print(f"Trained on {len(train):,} messages in {time.time() - start:.1f} seconds")

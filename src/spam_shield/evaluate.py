@@ -1,5 +1,7 @@
 """Grade a trained model on the test set: overall, per label, and per source."""
 
+import json
+
 import joblib
 import pandas as pd
 from sklearn.dummy import DummyClassifier
@@ -28,6 +30,27 @@ def print_metrics(name: str, metrics: dict) -> None:
     print(f"{name:<12} " + "  ".join(f"{key}={value:.3f}" for key, value in metrics.items()))
 
 
+def build_report(test: pd.DataFrame, predictions, baseline: dict) -> dict:
+    """Everything the analytics page shows, as plain numbers (saved as JSON)."""
+    results = test.assign(predicted=predictions)
+    return {
+        "test_messages": len(test),
+        "overall": compute_metrics(test["label"], predictions),
+        "baseline_always_ham": baseline,
+        "per_label": classification_report(
+            test["label"], predictions, labels=config.LABELS, output_dict=True, zero_division=0
+        ),
+        "confusion_matrix": {
+            "labels": config.LABELS,
+            "matrix": confusion_matrix(test["label"], predictions, labels=config.LABELS).tolist(),
+        },
+        "per_source": {
+            source: compute_metrics(group["label"], group["predicted"])
+            for source, group in results.groupby("source")
+        },
+    }
+
+
 def print_report(test: pd.DataFrame, predictions) -> None:
     """Per-label report, confusion matrix, and results per source."""
     print("\n=== Per label ===")
@@ -49,10 +72,16 @@ if __name__ == "__main__":
 
     # The "dumb" baseline: always predicts the most common label (ham).
     dummy = DummyClassifier(strategy="most_frequent").fit(train, train["label"])
-    print_metrics("always-ham", compute_metrics(test["label"], dummy.predict(test)))
+    baseline = compute_metrics(test["label"], dummy.predict(test))
+    print_metrics("always-ham", baseline)
 
     model = joblib.load(config.MODEL_FILE)
     predictions = model.predict(test)
-    print_metrics("naive bayes", compute_metrics(test["label"], predictions))
+    print_metrics("final model", compute_metrics(test["label"], predictions))
 
     print_report(test, predictions)
+
+    config.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    report_file = config.REPORTS_DIR / "test_metrics.json"
+    report_file.write_text(json.dumps(build_report(test, predictions, baseline), indent=2))
+    print(f"\nSaved report to {report_file}")

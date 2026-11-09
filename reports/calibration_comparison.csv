@@ -1,0 +1,3 @@
+method,log_loss,calibration_error,accuracy,macro_f1,phishing_recall
+sigmoid,0.2211,0.0125,0.9209,0.9086,0.9331
+isotonic,0.2176,0.0102,0.9198,0.9092,0.9359

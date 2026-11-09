@@ -1,0 +1,41 @@
+text_content,label,predicted,source,note
+URGENT: YOUR BANK ACCOUNT HAS BEEN SUSPENDED. VERIFY YOUR IDENTITY IMMEDIATELY AT http://secure-bank-login.net,phishing,phishing,email,phishing in capitals
+Your parcel could not be delivered. Pay the 1.99 redelivery fee here: http://royal-mail-redeliver.co,phishing,phishing,sms,smishing parcel
+"Hi, this is the IT helpdesk. Your mailbox is almost full. Please reply with your username and password so we can increase your storage.",phishing,ham,email,phishing without link
+"Dear customer, we noticed an unusual sign-in to your Apple ID from a new device. If this was not you, please confirm your details within 24 hours to avoid suspension.",phishing,ham,email,polite phishing no link
+Netflix: your payment failed. Update your card details now to keep watching: netflix-billing-update.com,phishing,ham,sms,smishing subscription
+HMRC: You are owed a tax refund of 264.80. Claim it before Friday by entering your bank details at http://hmrc-refund.org,phishing,ham,sms,smishing tax refund
+"Hi Sarah, it's your manager. I'm stuck in a meeting. Can you buy 5 Google Play gift cards and send me the codes? I'll pay you back today.",phishing,ham,sms,ceo gift card scam
+Your Microsoft 365 password expires today. Keep your current password by signing in here: https://office365-keep-password.com,phishing,ham,email,password expiry
+"Wells Fargo alert: a payment of $950 is pending. If you did not authorize this, call us immediately at 1-888-555-0199.",phishing,ham,sms,phone number instead of link
+Your Amazon order #402-8812 could not be shipped because your billing address is incorrect. Please update it within 48 hours.,phishing,ham,email,order scam no link
+"Dear friend, I am offering an exclusive opportunity to double your Bitcoin in just 7 days. Thousands of investors already joined. Reply to this email to get started.",spam,phishing,email,crypto spam as email
+We are hiring! Work from home 2 hours a day and earn $5000 a month. No experience needed. Send us a message today.,spam,phishing,email,job offer spam
+Lose 10kg in 2 weeks with our new natural pills. Doctors hate this trick. Order today and get 50% off.,spam,phishing,email,diet spam
+Hot singles in your area are waiting to chat with you. Text DATE to 80888 now.,spam,spam,sms,dating spam
+Exclusive deal for valued customers: 70% discount on all watches this weekend only. Shop now at www.luxury-watches-deals.com,spam,phishing,email,discount spam as email
+"Congratulations, your number was selected in our monthly draw. Call 09061234567 to collect your reward. Calls cost 1.50 per minute.",spam,spam,sms,classic sms spam
+Get unlimited data for just 5 a month! Reply YES to upgrade your plan today.,spam,ham,sms,upgrade offer
+Buy 1 get 1 free on all pizzas tonight only. Use code PIZZA2 at checkout.,spam,ham,sms,promo with free
+Make your website rank #1 on Google in 30 days. Our SEO experts guarantee results. Reply for a free audit.,spam,phishing,email,seo spam as email
+"Unlock your credit card with zero interest for 18 months. Apply in 60 seconds, no credit check required.",spam,phishing,email,credit card spam
+"Hi team, the slides for tomorrow are here: https://drive.google.com/file/d/abc123. Please review before 10am.",ham,ham,email,ham with link
+"Hey, I paid the electricity bill, your half is 45. Send it to my bank account whenever you can.",ham,ham,sms,ham about money
+"I'm not coming to the party tonight, I'm too tired. Have fun!",ham,ham,sms,ham with negation
+I have a headache and I'm going to bed early.,ham,ham,sms,short casual sms
+Are you free tonight? Want to grab dinner?,ham,ham,sms,ham with free
+Your appointment with Dr. Patel is confirmed for Monday at 9:30. Reply C to cancel.,ham,ham,sms,real reminder
+Thanks for your order! Your package will arrive on Thursday. Track it in the app.,ham,ham,email,real order confirmation
+lol that movie was so bad but I laughed the whole time,ham,toxic,chat,casual chat
+Can you send me the password for the wifi? The guests are asking.,ham,ham,sms,ham asking password
+"URGENT: the meeting has moved to room 4B, please let everyone know!!",ham,ham,email,ham in capitals with urgent
+"you are so stupid, nobody even likes you",toxic,toxic,sms,toxic in sms
+"Honestly, people like you are the reason this world is getting worse. Do us all a favour and disappear.",toxic,toxic,chat,toxic without swear words
+"With all due respect, your opinion is worthless and so are you.",toxic,toxic,chat,polite words insulting meaning
+"shut up idiot, nobody asked you",toxic,toxic,sms,short toxic sms
+"I hope you fail your exam, you deserve it, loser.",toxic,toxic,sms,wishing harm sms
+You're too dumb to understand basic things. Go back to school.,toxic,toxic,email,toxic as email
+What a pathetic excuse for a human being.,toxic,toxic,chat,insult no swear
+Keep talking and see what happens to you after school.,toxic,ham,sms,threat without swear
+Your work is garbage and you should be embarrassed to show it to anyone.,toxic,toxic,email,toxic in work email
+ugh you're such a waste of space,toxic,ham,chat,casual insult

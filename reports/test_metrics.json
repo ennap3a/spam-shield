@@ -1,0 +1,103 @@
+{
+  "test_messages": 7732,
+  "overall": {
+    "accuracy": 0.9284790481117434,
+    "macro_f1": 0.9180101720017342,
+    "phishing_recall": 0.9181957186544343
+  },
+  "baseline_always_ham": {
+    "accuracy": 0.6073460941541645,
+    "macro_f1": 0.18892822658513034,
+    "phishing_recall": 0.0
+  },
+  "per_label": {
+    "ham": {
+      "precision": 0.9342351716961499,
+      "recall": 0.9559199318568995,
+      "f1-score": 0.9449531628249658,
+      "support": 4696.0
+    },
+    "spam": {
+      "precision": 0.9821428571428571,
+      "recall": 0.859375,
+      "f1-score": 0.9166666666666666,
+      "support": 128.0
+    },
+    "phishing": {
+      "precision": 0.9608,
+      "recall": 0.9181957186544343,
+      "f1-score": 0.9390148553557467,
+      "support": 1308.0
+    },
+    "toxic": {
+      "precision": 0.8811501597444089,
+      "recall": 0.861875,
+      "f1-score": 0.8714060031595576,
+      "support": 1600.0
+    },
+    "accuracy": 0.9284790481117434,
+    "macro avg": {
+      "precision": 0.939582047145854,
+      "recall": 0.8988414126278333,
+      "f1-score": 0.9180101720017342,
+      "support": 7732.0
+    },
+    "weighted avg": {
+      "precision": 0.9285371582501888,
+      "recall": 0.9284790481117434,
+      "f1-score": 0.9282610478297958,
+      "support": 7732.0
+    }
+  },
+  "confusion_matrix": {
+    "labels": [
+      "ham",
+      "spam",
+      "phishing",
+      "toxic"
+    ],
+    "matrix": [
+      [
+        4489,
+        0,
+        38,
+        169
+      ],
+      [
+        10,
+        110,
+        6,
+        2
+      ],
+      [
+        91,
+        1,
+        1201,
+        15
+      ],
+      [
+        215,
+        1,
+        5,
+        1379
+      ]
+    ]
+  },
+  "per_source": {
+    "chat": {
+      "accuracy": 0.8928125,
+      "macro_f1": 0.44712214500887093,
+      "phishing_recall": 0.0
+    },
+    "email": {
+      "accuracy": 0.9614285714285714,
+      "macro_f1": 0.4805680974846022,
+      "phishing_recall": 0.9181957186544343
+    },
+    "sms": {
+      "accuracy": 0.9273255813953488,
+      "macro_f1": 0.4715807958617859,
+      "phishing_recall": 0.0
+    }
+  }
+}
