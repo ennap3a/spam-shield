@@ -1,6 +1,10 @@
 import pytest
 import pandas as pd
-from spam_shield.features import build_feature_transformer, extract_metadata
+from spam_shield.features import (
+    MODEL_METADATA_COLUMNS,
+    build_feature_transformer,
+    extract_metadata,
+)
 
 
 def test_metadata_on_spam_like_message():
@@ -32,7 +36,7 @@ def test_feature_transformer_shape():
     transformer = build_feature_transformer(min_df=1)
     X = transformer.fit_transform(make_fake_messages())
     vocabulary_size = len(transformer.named_transformers_["tfidf"].vocabulary_)
-    assert X.shape == (6, vocabulary_size + 7)    # word columns + 7 metadata columns
+    assert X.shape == (6, vocabulary_size + len(MODEL_METADATA_COLUMNS))
 
 
 def test_new_message_gets_same_columns():

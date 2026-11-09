@@ -1,0 +1,4 @@
+name,val_macro_f1,val_phishing_recall,challenge_macro_f1,challenge_phishing_recall,seconds
+with length (3.3),0.911,0.945,0.495,0.2,5.104
+without length (chosen),0.905,0.934,0.528,0.4,4.578
+no metadata,0.905,0.943,0.549,0.4,4.283

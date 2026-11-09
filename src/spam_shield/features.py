@@ -31,11 +31,13 @@ def extract_metadata(texts) -> pd.DataFrame:
         "digit_ratio": texts.str.count(r"\d") / safe_length,
     })
 
-# uppercase_ratio is NOT used by the model: the email dataset was lowercased
-# by its creators, so it reveals the source (email vs sms/chat), not the label.
+# Columns the model is NOT allowed to use, because they reveal the source
+# (email vs sms/chat) instead of the label:
+# - uppercase_ratio: the email dataset was lowercased by its creators.
+# - char_count, word_count: emails are long, SMS/chat are short. Task 5.1 showed
+#   that removing them keeps validation macro-F1 almost the same but improves
+#   results on the hand-written challenge set.
 MODEL_METADATA_COLUMNS = [
-    "char_count",
-    "word_count",
     "url_count",
     "email_count",
     "exclamation_count",
@@ -44,12 +46,14 @@ MODEL_METADATA_COLUMNS = [
 ]
 
 
-def metadata_for_model(texts) -> pd.DataFrame:
+def metadata_for_model(texts, columns=MODEL_METADATA_COLUMNS) -> pd.DataFrame:
     """Metadata features, keeping only the columns the model is allowed to use."""
-    return extract_metadata(texts)[MODEL_METADATA_COLUMNS]
+    return extract_metadata(texts)[list(columns)]
 
 
-def build_feature_transformer(min_df: int = 3) -> ColumnTransformer:
+def build_feature_transformer(
+    min_df: int = 3, metadata_columns=MODEL_METADATA_COLUMNS
+) -> ColumnTransformer:
     """TF-IDF on processed_text + scaled metadata on raw text_content, side by side."""
     tfidf = TfidfVectorizer(
         ngram_range=(1, 2),
@@ -59,12 +63,14 @@ def build_feature_transformer(min_df: int = 3) -> ColumnTransformer:
         sublinear_tf=True,
     )
     metadata = make_pipeline(
-        FunctionTransformer(metadata_for_model),   # raw text -> 7 numbers
+        FunctionTransformer(                       # raw text -> a few numbers
+            metadata_for_model, kw_args={"columns": list(metadata_columns)}
+        ),
         FunctionTransformer(np.log1p),             # shrink huge values
         MinMaxScaler(),                            # squeeze into 0..1
     )
-    return ColumnTransformer([
-        ("tfidf", tfidf, "processed_text"),
-        ("metadata", metadata, "text_content")
-    ])
+    parts = [("tfidf", tfidf, "processed_text")]
+    if metadata_columns:                           # an empty list means "words only"
+        parts.append(("metadata", metadata, "text_content"))
+    return ColumnTransformer(parts)
        

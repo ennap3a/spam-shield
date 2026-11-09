@@ -11,10 +11,10 @@ from spam_shield.features import build_feature_transformer
 from spam_shield.prepare import load_split
 
 
-def build_model(classifier) -> Pipeline:
+def build_model(classifier, features=None) -> Pipeline:
     """Glue the feature machine and a classifier into ONE object."""
     return Pipeline([
-        ("features", build_feature_transformer()),
+        ("features", features if features is not None else build_feature_transformer()),
         ("classifier", classifier),
     ])
 

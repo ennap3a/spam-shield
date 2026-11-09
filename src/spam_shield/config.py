@@ -34,3 +34,6 @@ TEST_FILE = PROCESSED_DATA_DIR / "test.csv"
 MODEL_FILE = MODELS_DIR / "naive_bayes.joblib"
 # --- Hand-written challenge set (messages from outside our 3 datasets) ---
 CHALLENGE_FILE = DATA_DIR / "challenge" / "challenge_set.csv"
+
+# --- Reports (small result files that ARE committed, used by the app) ---
+REPORTS_DIR = PROJECT_ROOT / "reports"

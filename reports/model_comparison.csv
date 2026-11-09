@@ -1,0 +1,5 @@
+name,val_macro_f1,val_phishing_recall,challenge_macro_f1,challenge_phishing_recall,seconds
+ComplementNB (4.2 winner),0.864,0.924,0.512,0.5,4.544
+LogisticRegression,0.901,0.943,0.523,0.3,7.301
+LinearSVC,0.905,0.934,0.528,0.4,4.627
+XGBoost,0.884,0.93,0.516,0.3,80.89
