@@ -1,6 +1,7 @@
 """Spam Shield API: lets other programs use the model over HTTP."""
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from spam_shield import config
@@ -10,6 +11,13 @@ app = FastAPI(
     title="Spam Shield API",
     description="Classifies a message as ham, spam, phishing or toxic.",
     version="1.1.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5500", "http://127.0.0.1:5500"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 
 BAD_MESSAGE = {400: {"description": "A message is empty or too long."}}

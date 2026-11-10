@@ -108,10 +108,43 @@ python -m spam_shield.challenge   # hand-written challenge set -> reports/
 
 ```bash
 ruff check .   # code style
-pytest -v      # 41 tests
+pytest -v      # 56 tests
 ```
 
 Both run automatically on GitHub for every push (GitHub Actions, `.github/workflows/ci.yml`).
+
+## REST API
+
+The same model is also served as a REST API with FastAPI, so other programs can use it.
+
+```bash
+uvicorn spam_shield.api:app        # then open http://127.0.0.1:8000/docs
+```
+
+| Method | Endpoint | What it does |
+|---|---|---|
+| GET | `/health` | Returns `{"status": "ok"}` when the API is running |
+| GET | `/labels` | The four labels the model knows |
+| POST | `/predict` | Classifies one message: `{"text": "..."}` |
+| POST | `/predict/batch` | Classifies up to 100 messages: `{"texts": ["...", "..."]}` |
+| POST | `/explain` | The label plus the words that pushed the model towards it |
+
+```bash
+curl -X POST http://127.0.0.1:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text": "WIN a FREE iPhone!!! Reply YES to claim your prize now"}'
+```
+
+Empty or too-long messages return `400` with the reason; a wrong request body returns `422`.
+
+Two small clients use the API over HTTP only (they never import the model):
+
+```bash
+python clients/inbox_checker.py clients/sample_inbox.csv   # command-line inbox report
+python -m http.server 5500 --directory clients/web         # web page at http://localhost:5500
+```
+
+The web page works because the API allows that origin through CORS (`CORSMiddleware` in `api.py`).
 
 ## Deploy
 
@@ -134,12 +167,14 @@ Both run automatically on GitHub for every push (GitHub Actions, `.github/workfl
 | `src/spam_shield/compare.py`, `tune.py`, `calibrate.py` | Model selection experiments (Phase 5) |
 | `src/spam_shield/evaluate.py`, `challenge.py` | Honest evaluation, saves `reports/` |
 | `src/spam_shield/predict.py` | Service layer used by the app: validation, prediction, explanations |
+| `src/spam_shield/api.py` | FastAPI REST API: `/predict`, `/predict/batch`, `/explain` |
+| `clients/` | Inbox Checker (Python) and a web page (JavaScript) that call the API |
 | `app/` | Streamlit app (`streamlit_app.py` → `views/classifier.py`, `views/analytics.py`) |
 | `data/challenge/challenge_set.csv` | 40 hand-written test messages |
 | `reports/` | Small result files read by the dashboard |
 | `models/` | The final trained model |
 | `notebooks/` | Exploration (EDA, preprocessing, Naive Bayes experiments) |
-| `tests/` | 41 automated tests |
+| `tests/` | 56 automated tests |
 | `docs/LEARNING_GUIDE.md` | Step-by-step explanation of every phase |
 
 ## Data
@@ -154,5 +189,5 @@ Both run automatically on GitHub for every push (GitHub Actions, `.github/workfl
 
 ## Tech stack
 
-Python 3.12 · pandas · scikit-learn · spaCy · XGBoost (compared) · Streamlit · Plotly ·
+Python 3.12 · pandas · scikit-learn · spaCy · XGBoost (compared) · FastAPI · Streamlit · Plotly ·
 pytest · ruff · GitHub Actions

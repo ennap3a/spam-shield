@@ -102,3 +102,23 @@ def test_explain_spam_shows_spam_words():
     assert body["label"] == "spam"
     words = [item["word"] for item in body["words"]]
     assert "prize" in words
+
+
+def test_cors_allows_the_web_page():
+    response = client.post(
+        "/predict",
+        json={"text": "hi there"},
+        headers={"Origin": "http://localhost:5500"},
+    )
+
+    assert response.headers.get("access-control-allow-origin") == "http://localhost:5500"
+
+
+def test_cors_blocks_unknown_sites():
+    response = client.post(
+        "/predict",
+        json={"text": "hi there"},
+        headers={"Origin": "https://evil.example"},
+    )
+
+    assert response.headers.get("access-control-allow-origin") is None
